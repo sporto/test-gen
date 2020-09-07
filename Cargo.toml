@@ -1,0 +1,17 @@
+[package]
+name = "test-gen"
+version = "0.1.0"
+authors = ["Sebastian <s@porto5.com>"]
+edition = "2018"
+
+# [lib]
+# name = "test-gen"
+# path = "src/lib.rs"
+
+# [[bin]]
+# name = "test-gen"
+# path = "src/bin.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
