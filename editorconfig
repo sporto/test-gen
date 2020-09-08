@@ -1,0 +1,9 @@
+
+# top-most EditorConfig file
+root = true
+
+[*.dhall]
+indent_style = tab
+
+[Justfile]
+indent_style = tab
