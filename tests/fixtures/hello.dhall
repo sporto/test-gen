@@ -5,49 +5,41 @@ let Test = \(input: Type) -> \(expected : Type) →
 		expected: expected,
 	}
 
--- let Describe: Type =
--- 	{
--- 		describe: Text,
--- 		its: List Test,
--- 	}
-
--- let DescribeOrTest = < Describe: Describe | Test: Test >
-
-let Subject = \(input: Type) -> \(out : Type) ->
-	{
-		entry : Text,
-		tests: List (Test input out),
-	}
-
-let describeLen : List (Subject Text Integer) = [
-	{
-		entry = "len",
-		tests =
-			[
-				{ it = "returns the len", input = "Hello", expected = +5 },
-				{ it = "returns the len", input = "", expected = +0 },
-			]
-	},
-]
-
-let describeHello : List (Subject Text Text) = [
-	{
-		entry = "hello",
-		tests =
-			[
-				{ it = "answers", input = "", expected = "Hello" },
-				{ it = "has the given name", input = "Sam", expected = "Hello Sam" },
-			]
-	},
-]
-
-let suite =
+let len : List (Test Text Integer) =
 	[
-		describeLen,
+		{ it = "returns the len", input = "Hello", expected = +5 },
+		{ it = "returns the len", input = "", expected = +0 },
 	]
 
--- Add describe (group its)
--- Add multiple assertions
--- Add inputs for test
+let hello : List (Test Text Text) =
+	[
+		{ it = "answers", input = "", expected = "Hello" },
+		{ it = "has the given name", input = "Sam", expected = "Hello Sam" },
+	]
+
+let parseInt : List (Test Text (Optional Integer)) =
+	[
+		{ it = "parses", input = "12", expected = Some +12 },
+		{ it = "can fail", input = "A1", expected = None Integer },
+	]
+
+let chars : List (Test Text (List Text)) =
+	[
+		{ it = "returns the characters", input = "ABC", expected = [ "A", "B", "C"] }
+	]
+
+let areas : List (Test {h: Integer, w: Integer} Integer) =
+	[
+		{ it = "gets the area", input = { h = +10, w = +20 }, expected = +200 }
+	]
+
+let suite =
+	{
+		len = len,
+		hello = hello,
+		parseInt = parseInt,
+		chars = chars,
+		areas = areas,
+	}
 
 in suite
