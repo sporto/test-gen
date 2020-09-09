@@ -1,50 +1,53 @@
-let Out = <
-		| String : Text
-		| Int : Integer
-		| Float : Double
-		| OptString: Optional Text
-		| ListString : List Text
-		| ListInt : List Integer
-		| ListFloat : List Double
-	>
-
-let Test : Type =
+let Test = \(input: Type) -> \(expected : Type) →
 	{
 		it: Text,
-		expected: Out,
+		input: input,
+		expected: expected,
 	}
 
-let Describe: Type =
-	{
-		describe: Text,
-		its: List Test,
-	}
+-- let Describe: Type =
+-- 	{
+-- 		describe: Text,
+-- 		its: List Test,
+-- 	}
 
-let DescribeOrTest = < Describe: Describe | Test: Test >
+-- let DescribeOrTest = < Describe: Describe | Test: Test >
 
-let Subject : Type =
+let Subject = \(input: Type) -> \(out : Type) ->
 	{
 		entry : Text,
-		returnType : Text,
-		tests: List DescribeOrTest,
+		tests: List (Test input out),
 	}
 
-let config : List Subject = [
+let describeLen : List (Subject Text Integer) = [
 	{
-		entry = "hello",
-		returnType = "string",
+		entry = "len",
 		tests =
 			[
-				DescribeOrTest.Test { it = "answers", expected = Out.String "Hello" },
-				DescribeOrTest.Test { it = "has the given name", expected = Out.String "Hello Sam" },
+				{ it = "returns the len", input = "Hello", expected = +5 },
+				{ it = "returns the len", input = "", expected = +0 },
 			]
 	},
 ]
 
+let describeHello : List (Subject Text Text) = [
+	{
+		entry = "hello",
+		tests =
+			[
+				{ it = "answers", input = "", expected = "Hello" },
+				{ it = "has the given name", input = "Sam", expected = "Hello Sam" },
+			]
+	},
+]
+
+let suite =
+	[
+		describeLen,
+	]
+
 -- Add describe (group its)
 -- Add multiple assertions
 -- Add inputs for test
--- Add different input types
--- Add different output types
 
-in config
+in suite
