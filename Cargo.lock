@@ -1161,6 +1161,7 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_dhall",
+ "serde_json",
 ]
 
 [[package]]
