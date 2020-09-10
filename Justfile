@@ -1,5 +1,5 @@
 validate:
-	dhall --file ./tests/fixtures/hello.dhall
+	dhall --file ./tests/fixtures/suite.dhall
 
 run:
 	cargo run --bin cli

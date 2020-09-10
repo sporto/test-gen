@@ -1,26 +1,35 @@
-use std::collections::BTreeMap;
+use serde::{Deserialize, Serialize};
+use std::fs;
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Test<input, out> {
+    it: String,
+    expected: out,
+    input: input,
+}
 
 pub fn main() {
-    match read_file() {
-        Ok(data) => {
-            // let deserialized_map: BTreeMap<String, usize> = serde_dhall::from_str(&data).parse().unwrap();
-            // println!("{:?}", deserialized_map)
-            parse_dhall(&data);
+    match start() {
+        Ok(deserialized_map) => {
+            println!("{:?}", deserialized_map);
         }
-        Err(_) =>
-            println!("Fail!")
+        Err(e) => println!("{}", e),
     };
 }
 
-fn read_file() -> Result<String, String> {
-    Ok("{ x = 1, y = 1 + 1 } : { x: Natural, y: Natural }".to_string())
+fn start() -> Result<Test<String, Vec<String>>, String> {
+    read_file().and_then(|s| parse_dhall(&s))
 }
 
-fn parse_dhall(data: &str) -> Result<String, String> {
-    let deserialized_map: BTreeMap<String, usize> = serde_dhall::from_str(&data)
-        .parse()
-        .map_err(|e| format!("{:?}", e))?;
+fn read_file() -> Result<String, String> {
+    let filename = "./tests/fixtures/test.dhall";
+    fs::read_to_string(filename).map_err(|e| format!("{:?}", e))
+    // Ok("{ x = 1, y = 1 + 1 } : { x: Natural, y: Natural }".to_string())
+}
 
-    println!("{:?}", deserialized_map);
-    Ok("Ok".to_string())
+fn parse_dhall(data: &str) -> Result<Test<String, Vec<String>>, String> {
+    // println!("{}", data);
+    serde_dhall::from_str(&data)
+        .parse()
+        .map_err(|e| format!("{:?}", e))
 }
