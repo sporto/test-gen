@@ -34,6 +34,6 @@ let areas
     = [ { it = "gets the area", input = { h = +10, w = +20 }, expected = +200 }
       ]
 
-let suite = { len, hello, parseInt, chars, areas }
+let suite = { name = "Misc", describes = { len, hello, parseInt, chars, areas }}
 
 in  suite
