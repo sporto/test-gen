@@ -9,10 +9,18 @@ struct Test<Input, Out> {
     input: Input,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct TestJson {
+    it: String,
+    expected: Value,
+    input: Value,
+}
+
 pub fn main() {
     match start() {
         Ok(deserialized_map) => {
-            println!("{:?}", deserialized_map);
+            // println!("{:?}", deserialized_map);
+            println!("{:?}", "Done");
         }
         Err(e) => println!("{}", e),
     };
@@ -21,15 +29,15 @@ pub fn main() {
 fn start() -> Result<Value, String> {
     let config: Value = read_config()?;
     let suite_name = get_suite_name(&config);
-    println!("{:?}", suite_name);
+    println!("Suite name: {:?}", suite_name);
 
     let describes = config["describes"]
         .as_object()
         .ok_or_else(|| "Cannot find describes")?;
 
     for (key, value) in describes {
-        println!("{:?}", key);
-        let _describe_chunk = get_describe_chunk(value);
+        println!("Describe: {:?}", key);
+        let _describe_chunk = get_describe_chunk(value.clone());
     }
 
     Ok(config)
@@ -55,6 +63,14 @@ fn get_suite_name(json: &Value) -> Option<&str> {
     json["name"].as_str()
 }
 
-fn get_describe_chunk(_json_test_list: &Value) -> String {
-    "jssj".into()
+fn get_describe_chunk(json_test_list: Value) -> Result<String, String> {
+    let test_list: Vec<TestJson> =
+        serde_json::from_value(json_test_list).map_err(|e| format!("{:?}", e))?;
+
+    // let test_list: Vec<Value> =
+    //     serde_json::from_value(json_test_list).map_err(|e| format!("{:?}", e))?;
+
+    test_list.into_iter().map(|test| println!("{:?}", test.it));
+
+    Ok("Ok".into())
 }
