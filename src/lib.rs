@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{Value};
+use serde_json::Value;
 use std::fs;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -19,6 +19,23 @@ pub fn main() {
 }
 
 fn start() -> Result<Value, String> {
+    let config: Value = read_config()?;
+    let suite_name = get_suite_name(&config);
+    println!("{:?}", suite_name);
+
+    let describes = config["describes"]
+        .as_object()
+        .ok_or_else(|| "Cannot find describes")?;
+
+    for (key, value) in describes {
+        println!("{:?}", key);
+        let describe_chunk = get_describe_chunk(value);
+    }
+
+    Ok(config)
+}
+
+fn read_config() -> Result<Value, String> {
     read_file().and_then(|s| parse_dhall(&s))
 }
 
@@ -29,8 +46,15 @@ fn read_file() -> Result<String, String> {
 }
 
 fn parse_dhall(data: &str) -> Result<Value, String> {
-    // println!("{}", data);
     serde_dhall::from_str(&data)
         .parse()
         .map_err(|e| format!("{:?}", e))
+}
+
+fn get_suite_name(json: &Value) -> Option<&str> {
+    json["name"].as_str()
+}
+
+fn get_describe_chunk(json_test_list: &Value) -> String {
+    "jssj".into()
 }
