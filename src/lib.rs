@@ -3,10 +3,10 @@ use serde_json::Value;
 use std::fs;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Test<input, out> {
+struct Test<Input, Out> {
     it: String,
-    expected: out,
-    input: input,
+    expected: Out,
+    input: Input,
 }
 
 pub fn main() {
@@ -29,7 +29,7 @@ fn start() -> Result<Value, String> {
 
     for (key, value) in describes {
         println!("{:?}", key);
-        let describe_chunk = get_describe_chunk(value);
+        let _describe_chunk = get_describe_chunk(value);
     }
 
     Ok(config)
@@ -55,6 +55,6 @@ fn get_suite_name(json: &Value) -> Option<&str> {
     json["name"].as_str()
 }
 
-fn get_describe_chunk(json_test_list: &Value) -> String {
+fn get_describe_chunk(_json_test_list: &Value) -> String {
     "jssj".into()
 }
