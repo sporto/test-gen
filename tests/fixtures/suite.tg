@@ -1,0 +1,17 @@
+suite "suite name":
+	define:
+		hello(name: string, age: int?) -> string
+		parse_int(input: string) -> int?
+
+	describe "hello":
+		it "says hello":
+			hello("", nil) is "Hello"
+
+		it "has the name":
+			hello("Sam", nil) is "Hello Sam"
+
+	describe "parse_int":
+		it "parses":
+			parse_int("1") is ok(1)
+		it "can fail":
+			parse_int("A") is nil
