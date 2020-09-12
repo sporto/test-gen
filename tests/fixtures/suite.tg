@@ -17,7 +17,6 @@ suite "suite name":
 		it "has the name":
 			hello(name="Sam", age=nil) is "Hello Sam"
 
-
 	describe "parse_int:
 		it "parses":
 			parse_int(input="1") is Some(1)
@@ -29,8 +28,8 @@ suite "suite name":
 
 	describe:
 		it "returns the head":
-			head(["a", "b"]) is Some("a")
+			head(list=["a", "b"]) is Some("a")
 
 		it "is none when empty":
-			head([]) is None
+			head(list=[]) is None
 

@@ -3,6 +3,7 @@ use serde_json::Value;
 use std::fs;
 
 mod ast;
+mod parser;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Test<Input, Out> {
