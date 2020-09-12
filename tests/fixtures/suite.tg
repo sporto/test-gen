@@ -1,17 +1,36 @@
 suite "suite name":
-	define:
-		hello(name: string, age: int?) -> string
-		parse_int(input: string) -> int?
 
-	describe "hello":
+	alias ListOfText = [Text]
+	alias Point = { x: Integer, y : Integer }
+
+	def hello(
+		name: Text,
+		age: Integer?
+	) -> Text
+
+	def parse_int(input: String) -> Integer?
+
+	describe "hello:
 		it "says hello":
-			hello("", nil) is "Hello"
+			hello(name="", age=nil) is "Hello"
 
 		it "has the name":
-			hello("Sam", nil) is "Hello Sam"
+			hello(name="Sam", age=nil) is "Hello Sam"
 
-	describe "parse_int":
+
+	describe "parse_int:
 		it "parses":
-			parse_int("1") is ok(1)
+			parse_int(input="1") is Some(1)
+
 		it "can fail":
-			parse_int("A") is nil
+			parse_int(input="A") is None
+
+	def head(list: [a]) -> a?
+
+	describe:
+		it "returns the head":
+			head(["a", "b"]) is Some("a")
+
+		it "is none when empty":
+			head([]) is None
+
