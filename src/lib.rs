@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::fs;
 
+mod ast;
+
 #[derive(Serialize, Deserialize, Debug)]
 struct Test<Input, Out> {
     it: String,

@@ -5,5 +5,8 @@ root = true
 [*.dhall]
 indent_style = tab
 
+[*.rs]
+indent_style = space
+
 [Justfile]
 indent_style = tab
