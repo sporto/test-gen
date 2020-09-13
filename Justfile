@@ -1,5 +1,5 @@
 validate:
-	dhall --explain --file ./tests/fixtures/suite-2.dhall
+	dhall --file ./tests/fixtures/suite-2.dhall
 
 test:
 	cargo test
