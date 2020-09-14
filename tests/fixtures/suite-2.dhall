@@ -18,7 +18,7 @@ let Test2 =
 	, output : outputType
 	}
 
-let fun1 =
+let test1 =
 	\(input1Type: Type) ->
 	\(outputType: Type) ->
 	\(input1 : input1Type) ->
@@ -51,7 +51,7 @@ let describe1 =
 --
 
 let len  =
-	fun1 Text Integer
+	test1 Text Integer
 
 let lenTests : Describe1 Text Integer =
 	describe1 "len" "input1" Text Integer
@@ -59,10 +59,20 @@ let lenTests : Describe1 Text Integer =
 		, len "" Assert.Equals +0
 		]
 
-let Function = < Len : Describe1 Text Integer >
+let parseInt =
+	test1 Text (Optional Integer)
+
+let parseIntTests =
+	describe1 "parseInt" "input" Text (Optional Integer)
+		[ parseInt "1" Assert.Equals (Some +1)
+		, parseInt "x" Assert.Equals (None Integer)
+		]
+
+let Function = < Len : Describe1 Text Integer | ParseInt : Describe1 Text (Optional Integer)>
 
 let suite : List Function = [
-	Function.Len lenTests
-]
+	Function.Len lenTests,
+	Function.ParseInt parseIntTests,
+	]
 
 in suite
