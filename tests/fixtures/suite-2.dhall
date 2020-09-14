@@ -1,19 +1,19 @@
 let Assert = < Equals >
 
-let Fun1 =
+let Test1 =
 	\(inputType: Type) ->
 	\(outputType: Type) ->
-	{ _1 : { input : inputType }
+	{ arg1 : inputType
 	, assertion : Assert
 	, output : outputType
 	}
 
-let Fun2 =
+let Test2 =
 	\(input1Type: Type) ->
 	\(input2Type: Type) ->
 	\(outputType: Type) ->
-	{ _1 : { input : input1Type }
-	, _2 : { input : input2Type }
+	{ arg1 : input1Type
+	, arg2 : input2Type
 	, assertion : Assert
 	, output : outputType
 	}
@@ -24,7 +24,7 @@ let fun1 =
 	\(input1 : input1Type) ->
 	\(assertion : Assert) ->
 	\(output : outputType) ->
-	{ _1 = { input = input1 }
+	{ arg1 = input1
 	, assertion = assertion
 	, output = output
 	}
@@ -34,7 +34,7 @@ let Describe1 =
 	\(outputType: Type) ->
 	{ functionName : Text
 	, arg1Name : Text
-	, tests : List (Fun1 input1Name outputType)
+	, tests : List (Test1 input1Name outputType)
 	}
 
 let describe1 =
@@ -42,7 +42,7 @@ let describe1 =
 	\(input1Name: Text) ->
 	\(input1Type: Type) ->
 	\(outputType: Type) ->
-	\(tests: List (Fun1 input1Type outputType)) ->
+	\(tests: List (Test1 input1Type outputType)) ->
 	{ functionName = name
 	, arg1Name = input1Name
 	, tests = tests
