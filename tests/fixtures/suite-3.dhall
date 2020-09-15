@@ -1,10 +1,18 @@
 let Assert = < Equals >
 
+let assertToCode =
+	\(assertion: Assert) ->
+	merge
+		{
+			Equals = "equals"
+		}
+		assertion
+
 let Test1 =
 	\(inputType: Type) ->
 	\(outputType: Type) ->
 	{ arg1 : inputType
-	, assertion : Assert
+	, assertion : Text
 	, output : outputType
 	}
 
@@ -14,7 +22,7 @@ let Test2 =
 	\(outputType: Type) ->
 	{ arg1 : input1Type
 	, arg2 : input2Type
-	, assertion : Assert
+	, assertion : Text
 	, output : outputType
 	}
 
@@ -25,7 +33,7 @@ let test1 =
 	\(assertion : Assert) ->
 	\(output : outputType) ->
 	{ arg1 = input1
-	, assertion = assertion
+	, assertion = assertToCode assertion
 	, output = output
 	}
 
@@ -68,16 +76,9 @@ let parseIntTests =
 		, parseInt "x" Assert.Equals (None Integer)
 		]
 
-let Function = < Len : Describe1 Text Integer | ParseInt : Describe1 Text (Optional Integer)>
-
-let suite =
+in
 	{
-		name = "suite",
-		describes =
-			[
-				Function.Len lenTests,
-				Function.ParseInt parseIntTests,
-			]
+		suiteName = "suite",
+		_1 = lenTests,
+		_2 = parseIntTests,
 	}
-
-in suite

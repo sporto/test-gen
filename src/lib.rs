@@ -1,9 +1,8 @@
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{Value,Map};
 use std::fs;
 
 mod ast;
-mod parser;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Test<Input, Out> {
@@ -30,28 +29,31 @@ pub fn main() {
 }
 
 fn start() -> Result<Value, String> {
-    let config: Value = read_config()?;
-    let suite_name = get_suite_name(&config);
+    let config : Value = read_config()?;
+
+    let config_as_map = config
+        .as_object()
+        .ok_or_else(|| "Cannot convert value to object")?;
+
+    let suite_name = &config_as_map["suiteName"];
     println!("Suite name: {:?}", suite_name);
 
-    let describes = config["describes"]
-        .as_object()
-        .ok_or_else(|| "Cannot find describes")?;
-
-    for (key, value) in describes {
+    for (key, value) in config_as_map {
         println!("Describe: {:?}", key);
-        let _describe_chunk = get_describe_chunk(value.clone());
+        // let _describe_chunk = get_describe_chunk(value.clone());
     }
 
     Ok(config)
 }
 
 fn read_config() -> Result<Value, String> {
-    read_file().and_then(|s| parse_dhall(&s))
+    read_file()
+        .and_then(|s| parse_dhall(&s))
+        // .and_then(|val| val.as_object().ok_or_else(|| "Not an object".to_string() ) )
 }
 
 fn read_file() -> Result<String, String> {
-    let filename = "./tests/fixtures/suite.dhall";
+    let filename = "./tests/fixtures/suite-3.dhall";
     fs::read_to_string(filename).map_err(|e| format!("{:?}", e))
     // Ok("{ x = 1, y = 1 + 1 } : { x: Natural, y: Natural }".to_string())
 }
@@ -59,11 +61,7 @@ fn read_file() -> Result<String, String> {
 fn parse_dhall(data: &str) -> Result<Value, String> {
     serde_dhall::from_str(&data)
         .parse()
-        .map_err(|e| format!("{:?}", e))
-}
-
-fn get_suite_name(json: &Value) -> Option<&str> {
-    json["name"].as_str()
+        .map_err(|e| format!("Error parsing dhall {:?}", e))
 }
 
 fn get_describe_chunk(json_test_list: Value) -> Result<String, String> {
